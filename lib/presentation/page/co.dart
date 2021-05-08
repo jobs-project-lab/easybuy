@@ -7,6 +7,7 @@ import 'package:easy/translations.dart';
 import 'package:flutter/material.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 import 'package:easy/operaions/countries.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   Home({Key key, this.title}) : super(key: key);
@@ -68,13 +69,16 @@ class _MyHomePageState extends State<Home> {
 
   void getCts() async {
     Country country = new Country();
-    List<CatModel> lit = await country.getCountryCates(countryName);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    List<CatModel> lit = await country.getCountryCates(countrySlug);
     setState(() {
+      prefs.setString("countrySlug", countrySlug);
       list = lit;
     });
   }
 
-  String countryName;
+  String countrySlug;
   static String countryNam;
   bool isLoading = true;
   Widget _buildItemList(BuildContext context, int index) {
@@ -85,8 +89,8 @@ class _MyHomePageState extends State<Home> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          countryName = countries[index].name;
-          countryNam = countryName;
+          countrySlug = countries[index].slug;
+          countryNam = countrySlug;
         });
         getCts();
         getFeatured(countries[index].name);

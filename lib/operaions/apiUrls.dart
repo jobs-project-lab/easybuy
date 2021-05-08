@@ -15,4 +15,8 @@ class ApiUrl {
   String getCountryCateUrl(String name) {
     return apiUrl + "/" + name + "/categories";
   }
+
+  String getSubCateLink(String countryName, String cateName) {
+    return apiUrl + "/" + countryName + "/" + cateName + "/subcategory";
+  }
 }

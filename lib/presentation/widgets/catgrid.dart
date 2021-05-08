@@ -1,4 +1,6 @@
 import 'package:easy/data/models/categoryModel.dart';
+import 'package:easy/operaions/apiUrls.dart';
+import 'package:easy/operaions/products.dart';
 import 'package:easy/presentation/page/ProductDetailsPage.dart';
 import 'package:easy/presentation/page/homeBottomNavBar.dart';
 import 'package:easy/presentation/page/BottomParPages/main_page.dart';
@@ -6,6 +8,7 @@ import 'package:easy/presentation/page/homeBottomNavBar1.dart';
 import 'package:easy/presentation/widgets/productList.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CatGrid extends StatefulWidget {
   List<CatModel> catList = [];
@@ -79,33 +82,16 @@ class _CatGridState extends State<CatGrid> {
           ],
         ),
       ),
-      onTap: () {
-        List<CatModel> catList0 = [];
-        catList0.add(CatModel(null, 'assets/icons/sfdf.png', 'first'));
-        catList0.add(CatModel(null, 'assets/icons/sfdf.png', 'second'));
-        catList0.add(CatModel(null, 'assets/icons/sfdf.png', 'third'));
-        catList0.add(CatModel(null, 'assets/icons/sfdf.png', 'fourth'));
-        catList0.add(CatModel(null, 'assets/icons/sfdf.png', 'fifth'));
-        // setState(() {
-        //   HomeBottomNavBar.wid = MainPage(catList0);
-        //   // widget.catList = catList0;
-        // });
+      onTap: () async {
+        List<CatModel> catList0 = await getSubCates(catlist[index].slug);
+        //print(catlist[index].lable);
         if (widget.source == 'mainPage') {
-          if (widget.catList[0].photoUrl == 'assets/icons/sfdf.png') {
-            Navigator.push(
-                context,
-                CupertinoPageRoute(
-                  builder: (context) =>
-                      HomeBottomNavBar1([], 'list', widget.featured),
-                ));
-          } else {
-            Navigator.push(
-                context,
-                CupertinoPageRoute(
-                  builder: (context) =>
-                      HomeBottomNavBar1(catList0, '', widget.featured),
-                ));
-          }
+          Navigator.push(
+              context,
+              CupertinoPageRoute(
+                builder: (context) =>
+                    HomeBottomNavBar1(catList0, '', widget.featured),
+              ));
         } else if (widget.source == 'addNewProduct') {
           if (widget.catList.length == 0) {
           } else {
@@ -115,5 +101,26 @@ class _CatGridState extends State<CatGrid> {
         }
       },
     );
+  }
+
+  Future<List<CatModel>> getSubCates(String cateName) async {
+    Product product = new Product();
+    ApiUrl api = new ApiUrl();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs != null) {
+      List<CatModel> result = [];
+      String countryName = prefs.getString("countryName");
+      List data = await product.getSubCategories(countryName, cateName);
+      //print(data);
+      if (data != null) {
+        for (var item in data) {
+          CatModel ct = new CatModel(item['id'], api.storageUrl + item['image'],
+              item['name'], item['slug']);
+          result.add(ct);
+        }
+        return result;
+      }
+    }
+    return null;
   }
 }

@@ -25,6 +25,7 @@ class Country {
           country.name = item['name'];
           country.nameAr = item['name_ar'];
           country.code = item['cod'];
+          country.slug = item['slug'];
           data.add(country);
         }
       }
@@ -46,8 +47,8 @@ class Country {
         var cates = result['data']['categories'];
         for (var cate in cates) {
           //print(cate);
-          data.add(
-              CatModel(null, api.storageUrl + cate['image'], cate['name']));
+          data.add(CatModel(null, api.storageUrl + cate['image'], cate['name'],
+              cate['slug']));
         }
       }
       //print(data);

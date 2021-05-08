@@ -40,14 +40,10 @@ class _MainPageState extends State<MainPage> with MainPageMixin {
           Expanded(
             child: CustomScrollView(
               slivers: [
-                widget.catList == null
-                    ? Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : CatGrid(
-                        catList: widget.catList,
-                        source: 'mainPage',
-                      ),
+                CatGrid(
+                  catList: widget.catList,
+                  source: 'mainPage',
+                ),
                 // getCategoryGrid(context, catList),
                 getSlidersList(context),
               ],
