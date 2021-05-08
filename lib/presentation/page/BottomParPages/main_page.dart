@@ -31,16 +31,13 @@ class _MainPageState extends State<MainPage> with MainPageMixin {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Visibility(
-            visible: subCat ? true : false,
+            visible: false,
             child: CatSlider(),
           ),
           Expanded(
             child: CustomScrollView(
               slivers: [
-                CatGrid(
-                  catList: widget.catList,
-                  source: 'mainPage',
-                ),
+                Container(child: Text("test")),
                 // getCategoryGrid(context, catList),
                 getSlidersList(context),
               ],

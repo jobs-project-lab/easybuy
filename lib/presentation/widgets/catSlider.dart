@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class CatSlider extends StatelessWidget {
   List<CatModel> catList = [];
   void getCates() async {
-    catList = await Home.getcats(catList);
+    catList = await Home.getcats([]);
   }
 
   @override
