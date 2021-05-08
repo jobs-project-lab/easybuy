@@ -35,6 +35,7 @@ class _HomeBottomNavBar1State extends State<HomeBottomNavBar1> {
   bool _proAppBar = true;
   var listFlag = 2;
   List<CatModel> catList = [];
+  String countryName;
   List featured = [];
   _HomeBottomNavBar1State(this.catList, this.featured);
 

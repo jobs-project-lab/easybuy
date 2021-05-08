@@ -16,11 +16,14 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> with MainPageMixin {
   // List<CatModel> catList = [];
   // _MainPageState(this.catList);
-  bool subCat;
+  bool subCat = false;
   @override
   void initState() {
-    subCat =
-        widget.catList[0].photoUrl == 'assets/icons/car.png' ? false : true;
+    try {
+      if (widget.catList != null && widget.catList[0] != null)
+        subCat =
+            widget.catList[0].photoUrl == 'assets/icons/car.png' ? false : true;
+    } catch (e) {}
   }
 
   @override
