@@ -40,18 +40,23 @@ mixin MainPageMixin<T extends StatefulWidget> on State<MainPage> {
   //
   //for the bottom slider
   Widget getSlidersList(context) {
-    return SliverPadding(
-      padding: EdgeInsets.only(top: 10, bottom: 10),
-      sliver: SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            return Column(
-                children: [getSliderItem(items[0], widget.featured[index])]);
-          },
-          childCount: 4,
-        ),
-      ),
-    );
+    return widget.featured == null
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
+        : SliverPadding(
+            padding: EdgeInsets.only(top: 10, bottom: 10),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return Column(children: [
+                    getSliderItem(items[0], widget.featured[index])
+                  ]);
+                },
+                childCount: 4,
+              ),
+            ),
+          );
   }
 
   Widget getSliderItem(cat, feature) {
