@@ -17,7 +17,7 @@ mixin MainPageMixin<T extends StatefulWidget> on State<MainPage> {
     'motherfucker'
   ];
   //for the grid
-
+  //
   // Widget getCategoryGrid(BuildContext context, List<CatModel> catList) {
   //   return SliverGrid(
   //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
