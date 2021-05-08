@@ -11,7 +11,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   Home({Key key, this.title}) : super(key: key);
-
   final String title;
   static Future<List<CatModel>> getcats(List<CatModel> list) async {
     return await _MyHomePageState.getCates();
@@ -90,14 +89,15 @@ class _MyHomePageState extends State<Home> {
       onTap: () {
         setState(() {
           countrySlug = countries[index].slug;
-          countryNam = countrySlug;
+          countryNam = countries[index].slug;
         });
         getCts();
         getFeatured(countries[index].name);
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => HomeBottomNavBar1(list, '', featured)));
+                builder: (context) =>
+                    HomeBottomNavBar1(list, '', featured, false)));
       },
       child: Container(
         width: 150,

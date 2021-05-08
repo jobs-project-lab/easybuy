@@ -20,9 +20,10 @@ class HomeBottomNavBar1 extends StatefulWidget {
   static int currentTab;
   List<CatModel> catList = [];
   List featured = [];
+  bool subCat;
   static GlobalKey<ScaffoldState> scaffoldkey = new GlobalKey<ScaffoldState>();
 
-  HomeBottomNavBar1(this.catList, this.list, this.featured);
+  HomeBottomNavBar1(this.catList, this.list, this.featured, this.subCat);
 
   @override
   _HomeBottomNavBar1State createState() =>
@@ -50,8 +51,11 @@ class _HomeBottomNavBar1State extends State<HomeBottomNavBar1> {
   void initState() {
     HomeBottomNavBar1.currentTab = 0; // to keep track of active tab index
     //print(featured);
-    currentScreen = MainPage(catList,
-        featured); // MainPage(catList0); //Dashboard(); // Our first view in viewport
+    currentScreen = MainPage(
+        catList,
+        featured,
+        widget
+            .subCat); // MainPage(catList0); //Dashboard(); // Our first view in viewport
   }
 
   @override
@@ -144,8 +148,10 @@ class _HomeBottomNavBar1State extends State<HomeBottomNavBar1> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    getNavBarItem([MainPage(catList, featured), ProductList()],
-                        '  Home  ', Icons.home, 0),
+                    getNavBarItem([
+                      MainPage(catList, featured, widget.subCat),
+                      ProductList()
+                    ], '  Home  ', Icons.home, 0),
                     getNavBarItem([ChatPage()], '    Chat    ', Icons.chat, 1),
                   ]),
               Row(

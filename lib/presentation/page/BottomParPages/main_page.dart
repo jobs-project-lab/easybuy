@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 class MainPage extends StatefulWidget {
   List<CatModel> catList = [];
   List featured = [];
-  MainPage(this.catList, this.featured);
+  bool subCat;
+  MainPage(this.catList, this.featured, this.subCat);
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -16,14 +17,10 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> with MainPageMixin {
   // List<CatModel> catList = [];
   // _MainPageState(this.catList);
-  bool subCat = false;
+  bool subCat;
   @override
   void initState() {
-    try {
-      if (widget.catList != null && widget.catList[0] != null)
-        subCat =
-            widget.catList[0].photoUrl == 'assets/icons/car.png' ? false : true;
-    } catch (e) {}
+    subCat = widget.subCat;
   }
 
   @override

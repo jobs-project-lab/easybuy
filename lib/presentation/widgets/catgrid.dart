@@ -90,7 +90,7 @@ class _CatGridState extends State<CatGrid> {
               context,
               CupertinoPageRoute(
                 builder: (context) =>
-                    HomeBottomNavBar1(catList0, '', widget.featured),
+                    HomeBottomNavBar1(catList0, '', widget.featured, true),
               ));
         } else if (widget.source == 'addNewProduct') {
           if (widget.catList.length == 0) {

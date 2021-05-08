@@ -12,7 +12,8 @@ class HomeBottomNavBar extends StatefulWidget {
   String list = '';
   List<CatModel> catList = [];
   List featured = [];
-  HomeBottomNavBar(this.catList, this.list, this.featured);
+  bool subCate;
+  HomeBottomNavBar(this.catList, this.list, this.featured, this.subCate);
   @override
   _HomeBottomNavBarState createState() => _HomeBottomNavBarState(catList);
 }
@@ -99,7 +100,7 @@ class _HomeBottomNavBarState extends State<HomeBottomNavBar> {
         if (widget.list == 'list') {
           return ProductList();
         } else {
-          return MainPage(widget.catList, widget.featured);
+          return MainPage(widget.catList, widget.featured, widget.subCate);
         }
         break;
       case 1:
