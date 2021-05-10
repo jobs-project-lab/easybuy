@@ -1,11 +1,26 @@
+import 'package:easy/operaions/users.dart';
 import 'package:easy/presentation/page/BottomParPages/chat_page.dart';
 import 'package:easy/presentation/page/BottomParPages/profile_page.dart';
 import 'package:easy/presentation/page/login.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class sideDrawer extends StatelessWidget {
+  User user = new User();
+  void getUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    user.name = prefs.getString("name");
+    print(user.name);
+    user.avatar = prefs.getString('avatar');
+    user.phone =
+        prefs.getString("countryCode") + " " + prefs.getString("phone");
+  }
+
   @override
   Widget build(BuildContext context) {
+    getUser();
+
     return ClipPath(
       clipper: OvalRightBorderClipper(),
       clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -38,8 +53,9 @@ class sideDrawer extends StatelessWidget {
                       shape: BoxShape.circle,
                       border: Border.all(width: 2, color: Colors.black12),
                       image: DecorationImage(
-                          image: NetworkImage(
-                              'https://i.pravatar.cc/300')), //AssetImage('images/pr.jpg')),
+                          image: NetworkImage(user.avatar == null
+                              ? 'https://i.pravatar.cc/300'
+                              : user.avatar)), //AssetImage('images/pr.jpg')),
                     ),
                   ),
                   Padding(
@@ -47,7 +63,7 @@ class sideDrawer extends StatelessWidget {
                   ),
                   SizedBox(height: 5.0),
                   Text(
-                    "Hoveg Morad",
+                    user.name == null ? "Hoveg Morad" : user.name,
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 18.0,
@@ -56,7 +72,7 @@ class sideDrawer extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(top: 6),
                   ),
-                  Text("+963 123 456 789",
+                  Text(user.phone == null ? "+963 123 456 789" : user.phone,
                       style: TextStyle(color: Colors.black, fontSize: 16.0)),
                   Padding(
                     padding: EdgeInsets.only(top: 10),
@@ -97,7 +113,7 @@ class sideDrawer extends StatelessWidget {
                       // change app state...
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
+                        CupertinoPageRoute(
                           builder: (context) => ProfilePage(),
                         ),
                       );
@@ -136,6 +152,7 @@ class sideDrawer extends StatelessWidget {
                     title: Text('Dark Mode'),
                     onTap: () {
                       // change app state...
+
                       Navigator.pop(context); // close the drawer
                     },
                   ),
