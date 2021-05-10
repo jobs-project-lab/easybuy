@@ -100,7 +100,7 @@ class _HomeBottomNavBarState extends State<HomeBottomNavBar> {
         if (widget.list == 'list') {
           return ProductList();
         } else {
-          return MainPage(widget.catList, widget.featured, widget.subCate);
+          return MainPage(widget.catList, widget.featured);
         }
         break;
       case 1:

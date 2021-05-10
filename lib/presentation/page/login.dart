@@ -1,10 +1,13 @@
 import 'dart:convert';
 
 import 'package:easy/presentation/page/co.dart';
+import 'package:easy/presentation/page/homeBottomNavBar1.dart';
 import 'package:easy/presentation/page/signup.dart';
 import 'package:easy/translations.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:easy/operaions/users.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'forget.dart';
 
 class Login extends StatefulWidget {
@@ -111,6 +114,7 @@ class _MyHomePageState extends State<Login> {
                           Padding(
                             padding: EdgeInsets.only(top: 10),
                             child: new TextFormField(
+                              obscureText: true,
                               controller: _passwordController,
                               decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
@@ -181,7 +185,9 @@ class _MyHomePageState extends State<Login> {
                                   var snackBar = SnackBar(
                                       content: Row(
                                     children: [
-                                      CircularProgressIndicator(),
+                                      CircularProgressIndicator(
+                                        color: Theme.of(context).primaryColor,
+                                      ),
                                       Padding(
                                         padding: EdgeInsets.symmetric(
                                             horizontal: 10),
@@ -196,12 +202,57 @@ class _MyHomePageState extends State<Login> {
                                       _passwordController.text);
                                   snackBar =
                                       SnackBar(content: Text(errorMessage));
+
+                                  SharedPreferences prefs =
+                                      await SharedPreferences.getInstance();
                                   setState(() {
                                     user = usr;
                                     if (user.errorMessage != null) {
                                       errorMessage = user.errorMessage;
+                                      snackBar = SnackBar(
+                                          content: Row(
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            child: Text(errorMessage),
+                                          )
+                                        ],
+                                      ));
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(snackBar);
+                                    } else {
+                                      prefs.setString('userId', user.id);
+                                      prefs.setString(
+                                          "apiToken", user.apiToken);
+                                      prefs.setString("name", user.name);
+                                      prefs.setString(
+                                          "userName", user.userName);
+                                      prefs.setString("roleId", user.roleId);
+                                      prefs.setString("phone", user.phone);
+                                      prefs.setString("avatar", user.avatar);
+                                      prefs.setString(
+                                          "createdAt", user.createdAt);
+                                      prefs.setString(
+                                          "updatedAt", user.updatedAt);
+                                      prefs.setString(
+                                          "countryId", user.countryId);
+                                      prefs.setString("gender", user.gender);
+                                      prefs.setString("cityId", user.cityId);
+                                      prefs.setString(
+                                          "countryName", user.country.name);
+                                      prefs.setString(
+                                          "countryNameAr", user.country.nameAr);
+                                      prefs.setString(
+                                          "countrySlug", user.country.slug);
+                                      prefs.setString(
+                                          "countryCode", user.country.code);
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  HomeBottomNavBar1(
+                                                      [], '', [], '')));
                                     }
                                   });
                                 },

@@ -4,8 +4,22 @@ import 'package:easy/presentation/page/constants.dart';
 import 'package:easy/presentation/page/BottomParPages/main_page.dart';
 import 'package:easy/presentation/widgets/slider.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 mixin MainPageMixin<T extends StatefulWidget> on State<MainPage> {
+  String countrySlug;
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void getCountrySlug() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      countrySlug = prefs.getString("countrySlug");
+    });
+  }
+
   buildGridFromApi() {}
   List<String> items = [
     'cars',
@@ -73,7 +87,7 @@ mixin MainPageMixin<T extends StatefulWidget> on State<MainPage> {
             ),
           ),
           Padding(padding: EdgeInsets.only(top: 10, bottom: 10)),
-          FeaturesSlider(3000, "tst", "test", "test", "5000"),
+          FeaturesSlider(3000, countrySlug, "1"),
           Container(
             height: 130,
             margin: EdgeInsets.only(top: 10),

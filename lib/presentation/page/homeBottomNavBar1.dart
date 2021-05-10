@@ -1,16 +1,19 @@
 import 'package:easy/data/models/categoryModel.dart';
+import 'package:easy/operaions/countries.dart';
+import 'package:easy/operaions/products.dart';
+import 'package:easy/operaions/users.dart';
 import 'package:easy/presentation/page/BottomParPages/chat_page.dart';
 import 'package:easy/presentation/page/BottomParPages/profile_page.dart';
 import 'package:easy/presentation/page/BottomParPages/settings_page.dart';
 import 'package:easy/presentation/widgets/AddNewProduct/ProductDetailsForm.dart';
 import 'package:easy/presentation/widgets/bottomSheetBuilder.dart';
-import 'package:easy/presentation/widgets/catgrid.dart';
 import 'package:easy/presentation/widgets/filters.dart';
 import 'package:easy/presentation/widgets/productList.dart';
 import 'package:easy/presentation/widgets/searchBar.dart';
 import 'package:easy/presentation/widgets/sideDrawer.dart';
 import 'package:easy/presentation/widgets/AddNewProduct/AddNewProduct.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'BottomParPages/main_page.dart';
 import 'co.dart';
@@ -20,14 +23,14 @@ class HomeBottomNavBar1 extends StatefulWidget {
   static int currentTab;
   List<CatModel> catList = [];
   List featured = [];
-  bool subCat;
+  String countrySlug;
   static GlobalKey<ScaffoldState> scaffoldkey = new GlobalKey<ScaffoldState>();
 
-  HomeBottomNavBar1(this.catList, this.list, this.featured, this.subCat);
+  HomeBottomNavBar1(this.catList, this.list, this.featured, this.countrySlug);
 
   @override
   _HomeBottomNavBar1State createState() =>
-      _HomeBottomNavBar1State(catList, featured);
+      _HomeBottomNavBar1State(catList, featured, countrySlug);
 }
 
 class _HomeBottomNavBar1State extends State<HomeBottomNavBar1> {
@@ -36,12 +39,12 @@ class _HomeBottomNavBar1State extends State<HomeBottomNavBar1> {
   bool _proAppBar = true;
   var listFlag = 2;
   List<CatModel> catList = [];
-  String countryName;
+  String countrySlug;
   List featured = [];
-  _HomeBottomNavBar1State(this.catList, this.featured);
+  _HomeBottomNavBar1State(this.catList, this.featured, this.countrySlug);
 
   // static GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
-  final GlobalKey appBarKey = new GlobalKey();
+  //final GlobalKey appBarKey = new GlobalKey();
   Widget currentScreen;
 
   // widget.currentTab = 0;
@@ -51,11 +54,37 @@ class _HomeBottomNavBar1State extends State<HomeBottomNavBar1> {
   void initState() {
     HomeBottomNavBar1.currentTab = 0; // to keep track of active tab index
     //print(featured);
-    currentScreen = MainPage(
-        catList,
-        featured,
-        widget
-            .subCat); // MainPage(catList0); //Dashboard(); // Our first view in viewport
+    initValues();
+    currentScreen = MainPage(catList,
+        featured); // MainPage(catList0); //Dashboard(); // Our first view in viewport
+  }
+
+  Country country = new Country();
+  User user = new User();
+  Product product = new Product();
+  void initValues() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs != null) {
+      try {
+        country.slug = prefs.getString("countrySlug");
+        country.name = prefs.getString("countryName");
+        country.nameAr = prefs.getString("countryNameAr");
+        user.id = prefs.getString("userId");
+        user.name = prefs.getString("name");
+        user.userName = prefs.getString("username");
+        user.apiToken = prefs.getString("apiToken");
+        user.roleId = prefs.getString("roleId");
+        user.phone = prefs.getString("phone");
+        user.avatar = prefs.getString("avatar");
+        List<CatModel> ctl = await country.getCountryCates(country.slug);
+        List ftd = await product.getFeatured(country.slug);
+        setState(() {
+          catList = ctl;
+          featured = ftd;
+          countrySlug = country.slug;
+        });
+      } catch (e) {}
+    }
   }
 
   @override
@@ -76,7 +105,6 @@ class _HomeBottomNavBar1State extends State<HomeBottomNavBar1> {
             ),
           ),
           child: AppBar(
-            key: appBarKey,
             backgroundColor: Color.fromRGBO(255, 255, 255, 0),
             // title: _proAppBar ? Text('') : Text('Home'),
             centerTitle: true,
@@ -148,10 +176,8 @@ class _HomeBottomNavBar1State extends State<HomeBottomNavBar1> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    getNavBarItem([
-                      MainPage(catList, featured, widget.subCat),
-                      ProductList()
-                    ], '  Home  ', Icons.home, 0),
+                    getNavBarItem([MainPage(catList, featured), ProductList()],
+                        '  Home  ', Icons.home, 0),
                     getNavBarItem([ChatPage()], '    Chat    ', Icons.chat, 1),
                   ]),
               Row(

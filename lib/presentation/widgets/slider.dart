@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:easy/operaions/apiUrls.dart';
+import 'package:easy/operaions/products.dart';
 import 'package:easy/presentation/page/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:easy/presentation/page/ProductDetailsPage.dart';
@@ -8,14 +10,25 @@ import 'package:easy/presentation/page/ProductDetailsPage.dart';
 class FeaturesSlider extends StatelessWidget {
   int duration;
   String image, name, des, price;
-  FeaturesSlider(this.duration, this.image, this.name, this.des, this.price);
+  String countrySlug;
+  String cateId = "0";
+  Product product = new Product();
+  List slider = [];
+  ApiUrl api = new ApiUrl();
+  FeaturesSlider(this.duration, this.countrySlug, this.cateId);
+  void getSlider() async {
+    slider = await product.getFeaturedSlider(countrySlug, cateId);
+  }
+
   @override
   Widget build(BuildContext context) {
+    getSlider();
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    return CarouselSlider(
-      items: [
-        GestureDetector(
+    return CarouselSlider.builder(
+      itemCount: slider.length,
+      itemBuilder: (context, index, realIndex) {
+        return GestureDetector(
           onTap: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => ProductDetailsPage()));
@@ -42,23 +55,23 @@ class FeaturesSlider extends StatelessWidget {
               Column(
                 children: [
                   //image con
-                  getImageUI(height, image),
+                  getImageUI(height, api.storageUrl + slider[index]['image']),
                   // getDateUI(),
-                  getNameUI(name),
-                  getDescriptionUI(des),
+                  getNameUI(slider[index]['title']),
+                  getDescriptionUI(" "),
                   Container(
                     height: 1,
                     color: Colors.grey[400],
                     width: double.infinity,
                     margin: EdgeInsets.only(left: 25, right: 25),
                   ),
-                  getPriceUI(5000),
+                  getPriceUI(slider[index]['price']),
                 ],
               )
             ]),
           ),
-        ),
-      ],
+        );
+      },
       options: CarouselOptions(
         height: 200.0,
         // disableCenter: true,

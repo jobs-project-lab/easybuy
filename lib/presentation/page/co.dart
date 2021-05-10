@@ -1,7 +1,5 @@
 import 'package:easy/data/models/categoryModel.dart';
 import 'package:easy/operaions/products.dart';
-import 'package:easy/presentation/page/homeBottomNavBar.dart';
-import 'package:easy/presentation/page/BottomParPages/main_page.dart';
 import 'package:easy/presentation/page/homeBottomNavBar1.dart';
 import 'package:easy/translations.dart';
 import 'package:flutter/material.dart';
@@ -67,13 +65,14 @@ class _MyHomePageState extends State<Home> {
   }
 
   void getCts() async {
-    Country country = new Country();
+    //Country country = new Country();
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    List<CatModel> lit = await country.getCountryCates(countrySlug);
+    //List<CatModel> lit = await country.getCountryCates(countrySlug);
     setState(() {
       prefs.setString("countrySlug", countrySlug);
-      list = lit;
+      //list.clear();
+      //list = lit;
     });
   }
 
@@ -97,21 +96,27 @@ class _MyHomePageState extends State<Home> {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    HomeBottomNavBar1(list, '', featured, false)));
+                    HomeBottomNavBar1(list, '', featured, countrySlug)));
       },
       child: Container(
-        width: 150,
+        alignment: Alignment.topCenter,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Center(
-              child: Container(
-                child: Text(
-                  countries[index].name,
-                  style: TextStyle(fontSize: 30, color: Colors.white),
-                ),
-                width: 135,
-                height: 135,
+            Container(
+              width: 75,
+              height: 75,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                      image: NetworkImage(countries[index].image),
+                      fit: BoxFit.fill)),
+            ),
+            Container(
+              child: Text(
+                countries[index].name,
+                style: TextStyle(fontSize: 30, color: Colors.white),
               ),
             ),
           ],
@@ -260,7 +265,7 @@ class _MyHomePageState extends State<Home> {
                         : Expanded(
                             child: ScrollSnapList(
                               itemBuilder: _buildItemList,
-                              itemSize: 150,
+                              itemSize: 100,
                               dynamicItemSize: true,
                               onReachEnd: () {},
                               itemCount: data.length,

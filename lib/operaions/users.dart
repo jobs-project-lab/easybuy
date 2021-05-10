@@ -29,25 +29,26 @@ class User {
       http.Response response = await http.post(Uri.parse(api.getUrl("login")),
           body: {'user_name': userName, 'password': password});
       var result = jsonDecode(response.body);
-      print(result);
       if (result['data'] != null) {
-        user.id = result['data']['id'];
+        //print(result['data']['country']);
+        user.id = result['data']['id'].toString();
         user.name = result['data']['name'];
-        user.roleId = result['data']['role_id'];
+        user.roleId = result['data']['role_id'].toString();
         user.userName = result['data']['user_name'];
         user.email = result['data']['email'];
         user.phone = result['data']['phone'];
-        user.avatar = api.storageUrl + "/" + result['data']['avatar'];
+        user.avatar = api.storageUrl + result['data']['avatar'];
         user.createdAt = result['data']['created_at'];
         user.updatedAt = result['data']['updated_at'];
-        user.countryId = result['data']['country_id'];
-        user.gender = result['data']['gender'];
-        user.currentLocationId = result['data']['current_location_id'];
-        user.cityId = result['data']['city_id'];
+        user.countryId = result['data']['country_id'].toString();
+        user.gender = result['data']['gender'].toString();
+        user.currentLocationId =
+            result['data']['current_location_id'].toString();
+        user.cityId = result['data']['city_id'].toString();
         user.fcmToken = result['data']['fcm_token'];
         user.apiToken = result['data']['api_token'];
         Country cn = new Country();
-        cn.id = result['data']['country']['id'];
+        cn.id = result['data']['country']['id'].toString();
         cn.name = result['data']['country']['name'];
         cn.nameAr = result['data']['country']['name_ar'];
         cn.currency = result['data']['country']['currency'];

@@ -30,13 +30,35 @@ class Product {
     }
   }
 
+  Future<List> getFeaturedSlider(String countrySlug, String cateId) async {
+    try {
+      http.Response response =
+          await http.get(Uri.parse(api.getCountryCateUrl(countrySlug)));
+      var result = jsonDecode(response.body);
+      //print(result['data']['advertise']);
+      List data = [];
+      var fts = result['data']['advertise']['ad_slider'];
+
+      if (fts != null) {
+        for (var item in fts) {
+          if (item['category_id'].toString() == cateId) data.add(item);
+        }
+      }
+      //print(data);
+      return data;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
   Future<List> getSubCategories(String countryName, String category) async {
     try {
       String url = api.getSubCateLink(countryName.toLowerCase(), category);
-      print(url);
+      //print(url);
       http.Response response = await http.get(Uri.parse(url));
       var result = jsonDecode(response.body);
-      print(result);
+      //print(result);
       if (result['data']['categories'] != null) {
         List data = [];
         var cates = result['data']['categories'];

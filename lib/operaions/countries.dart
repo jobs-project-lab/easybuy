@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 class Country {
   ApiUrl api = new ApiUrl();
-  String id, name, nameAr, currency, currencyAr, code, slug;
+  String id, name, nameAr, currency, currencyAr, code, slug, image;
   Future<List> getCountries() async {
     List<Country> data = [];
     try {
@@ -26,6 +26,7 @@ class Country {
           country.nameAr = item['name_ar'];
           country.code = item['cod'];
           country.slug = item['slug'];
+          country.image = api.storageUrl + item['image'];
           data.add(country);
         }
       }
