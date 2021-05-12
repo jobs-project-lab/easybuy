@@ -24,7 +24,7 @@ class FeaturedAdsSliderSection extends StatelessWidget {
           SizedBox(
             height: 16,
           ),
-          FeaturesSlider(3, "", "", "", ""),
+          //FeaturesSlider(3, "", "", "", ""),
         ],
       ),
     );

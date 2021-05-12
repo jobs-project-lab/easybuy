@@ -26,11 +26,8 @@ class HomeBottomNavBar1 extends StatefulWidget {
   String countrySlug;
   static GlobalKey<ScaffoldState> scaffoldkey = new GlobalKey<ScaffoldState>();
 
-  HomeBottomNavBar1(this.catList, this.list, this.featured, this.countrySlug);
-
   @override
-  _HomeBottomNavBar1State createState() =>
-      _HomeBottomNavBar1State(catList, featured, countrySlug);
+  _HomeBottomNavBar1State createState() => _HomeBottomNavBar1State();
 }
 
 class _HomeBottomNavBar1State extends State<HomeBottomNavBar1> {
@@ -41,7 +38,6 @@ class _HomeBottomNavBar1State extends State<HomeBottomNavBar1> {
   List<CatModel> catList = [];
   String countrySlug;
   List featured = [];
-  _HomeBottomNavBar1State(this.catList, this.featured, this.countrySlug);
 
   // static GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
   //final GlobalKey appBarKey = new GlobalKey();
@@ -178,15 +174,20 @@ class _HomeBottomNavBar1State extends State<HomeBottomNavBar1> {
                   children: <Widget>[
                     getNavBarItem([MainPage(catList, featured), ProductList()],
                         '  Home  ', Icons.home, 0),
-                    getNavBarItem([ChatPage()], '    Chat    ', Icons.chat, 1),
+                    getNavBarItem([
+                      ChatPage(
+                        hasBar: false,
+                      )
+                    ], '    Chat    ', Icons.chat, 1),
                   ]),
               Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
+                    getNavBarItem([ProfilePage(false)], 'Profile',
+                        Icons.account_circle, 2),
                     getNavBarItem(
-                        [ProfilePage()], 'Profile', Icons.account_circle, 2),
-                    getNavBarItem(
-                        [SettingsPage()], 'Setteings', Icons.settings, 3),
+                        [SettingsPage(false)], 'Setteings', Icons.settings, 3),
                   ]),
             ],
           ),
@@ -202,12 +203,7 @@ class _HomeBottomNavBar1State extends State<HomeBottomNavBar1> {
       minWidth: 40,
       onPressed: () {
         setState(() {
-          if (widget.catList.length == 0) {
-            // if(catList0.le)
-            currentScreen = ProductList();
-          } else if (widget.catList.length != 0) {
-            currentScreen = pages[0]; //MainPage(widget.catList);
-          }
+          currentScreen = pages[0]; //MainPage(widget.catList);
 
           HomeBottomNavBar1.currentTab = colorIndex;
         });

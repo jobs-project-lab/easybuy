@@ -10,12 +10,26 @@ import 'package:location_permissions/location_permissions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class LocationSection extends StatefulWidget {
+  String location;
+  LocationSection(this.location);
   @override
-  _LocationSectionState createState() => _LocationSectionState();
+  _LocationSectionState createState() => _LocationSectionState(location);
 }
 
 class _LocationSectionState extends State<LocationSection> {
+  String location;
+  double long = 0;
+  double wid = 0;
+  _LocationSectionState(this.location);
   Set<Marker> _markers = {};
+  @override
+  void initState() {
+    var l = location.split(",");
+    long = double.parse(l[0]);
+    wid = double.parse(l[1]);
+    super.initState();
+  }
+
   void _onTap(BuildContext context) {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => GoogleMapsScreen()));
@@ -26,7 +40,7 @@ class _LocationSectionState extends State<LocationSection> {
       _markers.add(
         Marker(
             markerId: MarkerId('id-1'),
-            position: LatLng(22.0548451989, 88.484981),
+            position: LatLng(long, wid),
             infoWindow: InfoWindow(title: 'Damascus', snippet: 'AlMazeh')),
       );
     });

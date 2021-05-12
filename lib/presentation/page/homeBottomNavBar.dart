@@ -118,7 +118,7 @@ class _HomeBottomNavBarState extends State<HomeBottomNavBar> {
         // Navigator.push(
         //     context, MaterialPageRoute(builder: (context) => ProfilePage()));
 
-        return ProfilePage();
+        return ProfilePage(true);
     }
   }
 

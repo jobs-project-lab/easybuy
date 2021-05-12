@@ -8,80 +8,46 @@ import 'package:flutter/material.dart';
 import 'package:easy/presentation/page/ProductDetailsPage.dart';
 
 class FeaturesSlider extends StatelessWidget {
+  String countrySlug, cateId;
+  int duration;
+  FeaturesSlider(this.duration, this.countrySlug, this.cateId);
+
+  @override
+  Widget build(BuildContext context) {
+    return FSlider(duration, countrySlug, cateId);
+  }
+}
+
+class FSlider extends StatefulWidget {
+  int duration;
+  String countrySlug, cateId;
+  FSlider(this.duration, this.countrySlug, this.cateId);
+  @override
+  _FSliderState createState() => _FSliderState(duration, countrySlug, cateId);
+}
+
+class _FSliderState extends State<FSlider> {
   int duration;
   String image, name, des, price;
   String countrySlug;
   String cateId = "0";
+  bool isLoading = true;
   Product product = new Product();
   List slider = [];
   ApiUrl api = new ApiUrl();
-  FeaturesSlider(this.duration, this.countrySlug, this.cateId);
-  void getSlider() async {
-    slider = await product.getFeaturedSlider(countrySlug, cateId);
+  _FSliderState(this.duration, this.countrySlug, this.cateId);
+  @override
+  void initState() {
+    getSlider();
+    super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    getSlider();
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
-    return CarouselSlider.builder(
-      itemCount: slider.length,
-      itemBuilder: (context, index, realIndex) {
-        return GestureDetector(
-          onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ProductDetailsPage()));
-          },
-          child: Container(
-            alignment: Alignment.center,
-            // height: height / 4,
-            width: width / 2.7,
-            // margin: EdgeInsets.only(right: 10),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: Offset(0, 3), // changes position of shadow
-                ),
-              ],
-              border: Border.all(width: 1, color: Colors.grey),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: ListView(children: [
-              Column(
-                children: [
-                  //image con
-                  getImageUI(height, api.storageUrl + slider[index]['image']),
-                  // getDateUI(),
-                  getNameUI(slider[index]['title']),
-                  getDescriptionUI(" "),
-                  Container(
-                    height: 1,
-                    color: Colors.grey[400],
-                    width: double.infinity,
-                    margin: EdgeInsets.only(left: 25, right: 25),
-                  ),
-                  getPriceUI(slider[index]['price']),
-                ],
-              )
-            ]),
-          ),
-        );
-      },
-      options: CarouselOptions(
-        height: 200.0,
-        // disableCenter: true,
-        viewportFraction: 0.43,
-        autoPlay: true,
-        autoPlayInterval: const Duration(seconds: 3),
-        autoPlayAnimationDuration: Duration(milliseconds: duration),
-        autoPlayCurve: Curves.fastOutSlowIn,
-      ),
-    );
+  void getSlider() async {
+    List sl = await product.getFeaturedSlider(countrySlug, cateId);
+    setState(() {
+      slider = sl;
+      isLoading = false;
+    });
   }
 
   Widget getImageUI(height, String image) {
@@ -94,8 +60,7 @@ class FeaturesSlider extends StatelessWidget {
             // image: AssetImage(
             //   'images/uaef.png',
             // ),
-            image: NetworkImage(
-                "https://easybuy-in.com/new/storage/advertisments/January2021/i0XWz3fFdcstPLo2PPpc.png"),
+            image: NetworkImage(image),
             fit: BoxFit.fill,
           ),
           borderRadius: BorderRadius.only(
@@ -128,7 +93,9 @@ class FeaturesSlider extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(left: 20, top: 5),
       width: double.infinity,
-      child: Text(name, style: textStyle.headline2, textAlign: TextAlign.left),
+      child: Text(name,
+          style: TextStyle(fontWeight: FontWeight.bold),
+          textAlign: TextAlign.left),
     );
   }
 
@@ -153,7 +120,6 @@ class FeaturesSlider extends StatelessWidget {
         'Price: $price',
         style: TextStyle(
             fontSize: 15,
-            fontFamily: 'Georgia',
             // fontStyle: FontStyle.,
             fontWeight: FontWeight.bold,
             color: Colors.orange[700]),
@@ -161,5 +127,74 @@ class FeaturesSlider extends StatelessWidget {
         maxLines: 1,
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+    return isLoading
+        ? Center(child: CircularProgressIndicator())
+        : CarouselSlider.builder(
+            itemCount: slider.length,
+            itemBuilder: (context, index, realIndex) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ProductDetailsPage(slider[index]['slug'])));
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  // height: height / 4,
+                  width: width / 2.7,
+                  // margin: EdgeInsets.only(right: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                    border: Border.all(width: 1, color: Colors.grey),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: ListView(children: [
+                    Column(
+                      children: [
+                        //image con
+                        getImageUI(
+                            height, api.storageUrl + slider[index]['image']),
+                        // getDateUI(),
+                        getNameUI(slider[index]['title']),
+                        getDescriptionUI(" "),
+                        Container(
+                          height: 1,
+                          color: Colors.grey[400],
+                          width: double.infinity,
+                          margin: EdgeInsets.only(left: 25, right: 25),
+                        ),
+                        getPriceUI(slider[index]['price']),
+                      ],
+                    )
+                  ]),
+                ),
+              );
+            },
+            options: CarouselOptions(
+              height: 200.0,
+              // disableCenter: true,
+              viewportFraction: 0.43,
+              autoPlay: true,
+              autoPlayInterval: const Duration(seconds: 3),
+              autoPlayAnimationDuration: Duration(milliseconds: duration),
+              autoPlayCurve: Curves.fastOutSlowIn,
+            ),
+          );
   }
 }

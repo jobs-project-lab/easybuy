@@ -17,7 +17,7 @@ class PropertyInfo extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    'Car Info',
+                    'Info',
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -65,14 +65,14 @@ class PropertyInfo extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
+              /*Icon(
                 icon,
                 color: Colors.orange,
                 size: 24,
               ),
               SizedBox(
                 width: 8,
-              ),
+              ),*/
               Text(
                 label,
                 style: TextStyle(

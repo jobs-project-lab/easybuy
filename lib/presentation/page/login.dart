@@ -251,8 +251,7 @@ class _MyHomePageState extends State<Login> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  HomeBottomNavBar1(
-                                                      [], '', [], '')));
+                                                  HomeBottomNavBar1()));
                                     }
                                   });
                                 },

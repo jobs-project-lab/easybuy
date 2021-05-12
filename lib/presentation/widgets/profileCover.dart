@@ -4,7 +4,11 @@ import 'package:flutter/material.dart';
 // import 'top_bar.dart';
 
 class ProfileCover extends StatelessWidget {
-  const ProfileCover({
+  final String image, name, date;
+  const ProfileCover(
+    this.name,
+    this.date,
+    this.image, {
     Key key,
   }) : super(key: key);
 
@@ -33,21 +37,21 @@ class ProfileCover extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 CircularProfileAvatar(
-                  "https://i.pravatar.cc/300",
+                  image,
                   borderWidth: 4.0,
                   radius: 60.0,
                 ),
                 SizedBox(height: 4.0),
                 // Padding(padding: EdgeInsets.only(top: 5)),
                 Text(
-                  "Neecoder X",
+                  name,
                   style: TextStyle(
                     fontSize: 21.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
-                  "member since: 15/3/2021",
+                  date,
                   style: TextStyle(
                     fontSize: 12.0,
                     color: Colors.grey[700],

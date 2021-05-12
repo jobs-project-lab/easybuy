@@ -92,11 +92,8 @@ class _MyHomePageState extends State<Home> {
         });
         getCts();
         getFeatured(countries[index].name);
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    HomeBottomNavBar1(list, '', featured, countrySlug)));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => HomeBottomNavBar1()));
       },
       child: Container(
         alignment: Alignment.topCenter,

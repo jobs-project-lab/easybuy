@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
 class PostedBySection extends StatefulWidget {
+  String name, date;
+  PostedBySection(this.name, this.date);
   @override
-  _PostedBySectionState createState() => _PostedBySectionState();
+  _PostedBySectionState createState() => _PostedBySectionState(name, date);
 }
 
 class _PostedBySectionState extends State<PostedBySection> {
+  String name, date;
+  _PostedBySectionState(this.name, this.date);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -44,11 +48,11 @@ class _PostedBySectionState extends State<PostedBySection> {
                 child: Column(
                   children: [
                     Text(
-                      'Soso',
+                      name,
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      'Member Since Jan 12/2021',
+                      'Member Since $date',
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                       softWrap: true,
                     ),

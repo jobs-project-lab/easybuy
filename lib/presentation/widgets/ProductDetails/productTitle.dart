@@ -38,34 +38,6 @@ class ProductTitle extends StatelessWidget {
                     fontWeight: FontWeight.bold),
               ),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.only(bottom: 8.0),
-            //   child: Divider(
-            //     color: Colors.grey,
-            //   ),
-            // ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     Icon(
-            //       Icons.single_bed,
-            //       color: Colors.orange,
-            //     ),
-            //     Text('2 Bedroom'),
-            //     SizedBox(),
-            //     Icon(
-            //       Icons.bathtub_rounded,
-            //       color: Colors.orange,
-            //     ),
-            //     Text('3 Bathroom'),
-            //     SizedBox(),
-            //     Icon(
-            //       Icons.square_foot,
-            //       color: Colors.orange,
-            //     ),
-            //     Text('1,391 Sqft'),
-            //   ],
-            // ),
           ],
         ),
       ),

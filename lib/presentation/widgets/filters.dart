@@ -10,7 +10,9 @@ class _FilterState extends State<Filter> {
   List<String> dataList = ['kiki1', 'kiki2', 'kiki3'];
 
   int _site;
-
+  String _country = "syria";
+  String _cate = "motors";
+  String _subcate = "used";
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,8 +21,91 @@ class _FilterState extends State<Filter> {
         borderRadius: BorderRadius.circular(20),
       ),
       margin: EdgeInsets.only(top: 40, left: 30, right: 30),
-      child: ListView.builder(
-          itemBuilder: (context, index) => itemBuilder(context, dataList)),
+      child: ListView(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        children: [
+          Container(
+              padding: EdgeInsets.all(5),
+              child: Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 8),
+                    child: DropdownButtonFormField(
+                      value: _country,
+                      decoration: InputDecoration(
+                          labelText: "Country",
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide:
+                                  BorderSide(width: 1, color: Colors.orange))),
+                      items: [
+                        DropdownMenuItem(
+                          child: Text("Syria"),
+                          value: "syria",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("Saudi Arabia"),
+                          value: "ksa",
+                        )
+                      ],
+                      onChanged: (value) {
+                        _country = value;
+                      },
+                    ),
+                  ),
+                  Container(
+                      margin: EdgeInsets.symmetric(vertical: 8),
+                      child: DropdownButtonFormField(
+                        value: _cate,
+                        decoration: InputDecoration(
+                            labelText: "Category",
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide(
+                                    width: 1, color: Colors.orange))),
+                        items: [
+                          DropdownMenuItem(
+                            child: Text("Motors"),
+                            value: "motors",
+                          ),
+                          DropdownMenuItem(
+                            child: Text("Saudi Arabia"),
+                            value: "ksa",
+                          )
+                        ],
+                        onChanged: (value) {
+                          _cate = value;
+                        },
+                      )),
+                  Container(
+                      margin: EdgeInsets.symmetric(vertical: 8),
+                      child: DropdownButtonFormField(
+                        value: _subcate,
+                        decoration: InputDecoration(
+                            labelText: "Sub-Category",
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide(
+                                    width: 1, color: Colors.orange))),
+                        items: [
+                          DropdownMenuItem(
+                            child: Text("used"),
+                            value: "used",
+                          ),
+                          DropdownMenuItem(
+                            child: Text("Saudi Arabia"),
+                            value: "ksa",
+                          )
+                        ],
+                        onChanged: (value) {
+                          _subcate = value;
+                        },
+                      )),
+                ],
+              ))
+        ],
+      ),
     );
   }
 
@@ -43,6 +128,7 @@ class _FilterState extends State<Filter> {
         expanded: Container(
           height: MediaQuery.of(context).size.height / 3,
           child: ListView.builder(
+            itemCount: 2,
             itemBuilder: (context, index) {
               return Container(
                 alignment: Alignment.centerLeft,

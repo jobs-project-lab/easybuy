@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:readmore/readmore.dart';
 
 class DescriptionSection extends StatefulWidget {
+  String des;
+  DescriptionSection(this.des);
   @override
-  _DescriptionSectionState createState() => _DescriptionSectionState();
+  _DescriptionSectionState createState() => _DescriptionSectionState(des);
 }
 
 class _DescriptionSectionState extends State<DescriptionSection> {
+  String des;
+  _DescriptionSectionState(this.des);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,14 +36,17 @@ class _DescriptionSectionState extends State<DescriptionSection> {
           Column(
             children: [
               ReadMoreText(
-                'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium.',
+                des,
                 trimLines: 2,
                 style: TextStyle(color: Colors.black),
                 colorClickableText: Colors.pink,
                 trimMode: TrimMode.Line,
                 trimCollapsedText: 'Show more',
                 trimExpandedText: 'Show less',
-                moreStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.orange),
+                moreStyle: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.orange),
               ),
             ],
           ),
@@ -83,5 +90,3 @@ class _DescriptionSectionState extends State<DescriptionSection> {
     );
   }
 }
-
-

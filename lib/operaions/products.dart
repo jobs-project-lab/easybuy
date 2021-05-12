@@ -37,15 +37,34 @@ class Product {
       var result = jsonDecode(response.body);
       //print(result['data']['advertise']);
       List data = [];
-      var fts = result['data']['advertise']['ad_slider'];
+      var fts = result['data']['advertise'];
 
       if (fts != null) {
         for (var item in fts) {
-          if (item['category_id'].toString() == cateId) data.add(item);
+          if (item['category_id'].toString() == cateId)
+            for (var feature in item['ad_slider']) data.add(feature);
         }
       }
       //print(data);
       return data;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>> getProductDetails(String slug) async {
+    try {
+      http.Response response =
+          await http.get(Uri.parse(api.apiUrl + "/ad/" + slug));
+      var result = jsonDecode(response.body);
+      Map<String, dynamic> details;
+      if (result['data']['ads'] != null) {
+        details = result['data']['ads'];
+        //print(details);
+        return details;
+      }
+      return null;
     } catch (e) {
       print(e);
       return null;

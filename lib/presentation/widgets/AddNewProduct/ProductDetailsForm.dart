@@ -1,6 +1,8 @@
+import 'package:cupertino_stepper/cupertino_stepper.dart';
 import 'package:easy/presentation/page/forget.dart';
 import 'package:easy/presentation/widgets/ProductDetails/LocationSection.dart';
 import 'package:easy/presentation/widgets/FormInput/ImageInput.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:async';
@@ -233,6 +235,21 @@ class _ProductDetailsFormState extends State<ProductDetailsForm> {
     );
   }
 
+  int _currentStep = 0;
+  tapped(int step) {
+    setState(() => _currentStep = step);
+  }
+
+  continued() {
+    _currentStep < 2 ? setState(() => _currentStep += 1) : null;
+  }
+
+  cancel() {
+    _currentStep > 0 ? setState(() => _currentStep -= 1) : null;
+  }
+
+  String _country = "city1";
+  String _category = "city1";
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -244,46 +261,154 @@ class _ProductDetailsFormState extends State<ProductDetailsForm> {
         child: Form(
           child: ListView(
             children: [
-              _buildTitleRow(),
-              SizedBox(height: 30),
-              _buildAdTitleTextFormField(),
-              SizedBox(height: 10),
-              _buildDescriptionTextFormField(),
-              SizedBox(height: 10),
-              _buildPriceTextField(),
-              SizedBox(height: 10),
-              _buildPhoneNumberTextField(),
-              SizedBox(height: 10),
-              _buildCitiesDropDownList('City', 'cities'),
-              SizedBox(height: 10),
-              ImageInput(),
-              SizedBox(
-                height: 10,
-              ),
-              LocationSection(),
-              SizedBox(
-                height: 10,
-              ),
-              _buildCitiesDropDownList('Category', 'mainCategories'),
-              SizedBox(
-                height: 10,
-              ),
-              flag > 0
-                  ? _buildCitiesDropDownList('Category', 'subCategories')
-                  : SizedBox(
-                      height: 40,
+              Stepper(
+                  type: StepperType.vertical,
+                  physics: ScrollPhysics(),
+                  currentStep: _currentStep,
+                  onStepTapped: (step) => tapped(step),
+                  onStepContinue: continued,
+                  onStepCancel: cancel,
+                  steps: <Step>[
+                    Step(
+                      title: new Text('Ad info'),
+                      content: Column(
+                        children: <Widget>[
+                          TextFormField(
+                            decoration: InputDecoration(
+                                labelText: 'Ad title',
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(35),
+                                    borderSide: BorderSide(
+                                        color: Colors.black, width: 1)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(35),
+                                    borderSide: BorderSide(
+                                        color: Colors.black, width: 1))),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                              minLines: 10,
+                              maxLines: 50,
+                              decoration: InputDecoration(
+                                  labelText: 'Description',
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(35),
+                                      borderSide: BorderSide(
+                                          color: Colors.black, width: 1)),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(35),
+                                      borderSide: BorderSide(
+                                          color: Colors.black, width: 1)))),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                              decoration: InputDecoration(
+                                  labelText: 'Price',
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(35),
+                                      borderSide: BorderSide(
+                                          color: Colors.black, width: 1)),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(35),
+                                      borderSide: BorderSide(
+                                          color: Colors.black, width: 1)))),
+                        ],
+                      ),
+                      isActive: _currentStep == 0,
                     ),
-              SizedBox(
-                height: 10,
-              ),
-              flag == 2
-                  ? _buildCitiesDropDownList('Category', 'subCategories')
-                  : SizedBox(
-                      height: 40,
+                    Step(
+                      title: Text("Ads Image"),
+                      content: Container(
+                        child: ElevatedButton.icon(
+                            onPressed: () {},
+                            icon: Icon(Icons.camera_alt),
+                            label: Text("Add Image")),
+                      ),
+                      isActive: _currentStep == 1,
                     ),
-              SizedBox(
-                height: 50,
-              ),
+                    Step(
+                        title: Text("Contact info"),
+                        content: Container(
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                                labelText: 'Contact Phone Number',
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(35),
+                                    borderSide: BorderSide(
+                                        color: Colors.black, width: 1)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(35),
+                                    borderSide: BorderSide(
+                                        color: Colors.black, width: 1))),
+                          ),
+                        ),
+                        isActive: _currentStep == 2),
+                    Step(
+                        title: Text("Location"),
+                        content: Container(
+                          child: DropdownButtonFormField(
+                            value: _country,
+                            decoration: InputDecoration(
+                                labelText: "Choose language",
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                    borderSide: BorderSide(
+                                        width: 1, color: Colors.orange))),
+                            items: [
+                              DropdownMenuItem(
+                                child: Text("Syria"),
+                                value: "city1",
+                              ),
+                              DropdownMenuItem(
+                                child: Text("UAE"),
+                                value: "city2",
+                              ),
+                              DropdownMenuItem(
+                                child: Text("Saudi Arabia"),
+                                value: "city3",
+                              )
+                            ],
+                            onChanged: (value) {
+                              _country = value;
+                            },
+                          ),
+                        ),
+                        isActive: _currentStep == 3),
+                    Step(
+                        title: Text("Category"),
+                        content: Container(
+                          child: DropdownButtonFormField(
+                            value: _category,
+                            decoration: InputDecoration(
+                                labelText: "Choose Category",
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                    borderSide: BorderSide(
+                                        width: 1, color: Colors.orange))),
+                            items: [
+                              DropdownMenuItem(
+                                child: Text("Motors"),
+                                value: "city1",
+                              ),
+                              DropdownMenuItem(
+                                child: Text("Properties"),
+                                value: "city2",
+                              ),
+                              DropdownMenuItem(
+                                child: Text("jobs"),
+                                value: "city3",
+                              )
+                            ],
+                            onChanged: (value) {
+                              _category = value;
+                            },
+                          ),
+                        ),
+                        isActive: _currentStep == 4)
+                  ])
             ],
           ),
         ),
